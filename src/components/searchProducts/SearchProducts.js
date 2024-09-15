@@ -3,7 +3,8 @@ import Product from './Product.js';
 import './SearchProducts.css'
 
 function SearchProducts({ products, chooseSelectedProduct }) {
-  const [productSelected, setPrductSelected] = useState();
+  const [productSelectedIndex, setProductSelectedIndex] = useState(0);
+  const [productSelected, setProductSelected] = useState();
   const [listProducts, setListProducts] = useState(products);
   const inputRef = useRef(null);
 
@@ -18,12 +19,33 @@ function SearchProducts({ products, chooseSelectedProduct }) {
 
   useEffect(() => {
     if (typeof listProducts[0] == "object") {
-      setPrductSelected(listProducts[0].Code);
+      setProductSelected(listProducts[productSelectedIndex].Code);
     }
-  }, [listProducts])
+  }, [listProducts, productSelectedIndex])
+
+  const handleKeyDown = async (event) => {
+    if (listProducts.length === 0){
+      return;
+    }
+    if (event.key === 'ArrowDown') {
+      setProductSelectedIndex((prevIndex) => {
+        const nextIndex = Math.min(prevIndex + 1, listProducts.length - 1);
+        setProductSelected(listProducts[nextIndex].Code);
+        return nextIndex;
+      })
+    } else if (event.key === 'ArrowUp'){
+      setProductSelectedIndex((prevIndex) => {
+        const prev = Math.max(prevIndex - 1, 0);
+        setProductSelected(listProducts[prev].Code);
+        return prev;
+      })
+    } else if (event.key === 'Enter'){
+      chooseSelectedProduct(productSelected)
+    }
+  };
 
   return (
-    <div className="modal-search-products">
+    <div onKeyDown={handleKeyDown} className="modal-search-products">
       <div className="content-modal-search-products">
         <div className='product-selection'>
           <div className='selection-header'>
@@ -39,7 +61,7 @@ function SearchProducts({ products, chooseSelectedProduct }) {
                 price={item.SalePrice}
                 productSelected={productSelected}
                 chooseSelectedProduct={chooseSelectedProduct}
-                setProductSelected={setPrductSelected}
+                setProductSelected={setProductSelected}
               />
             ))}
           </div>

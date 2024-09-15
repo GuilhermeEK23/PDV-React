@@ -3,7 +3,7 @@ import './Product.css';
 function Product({code, description, stock, price, productSelected, chooseSelectedProduct, setProductSelected}){
   return (
     <div 
-      className={`product ${productSelected == code ? 'product-selected' : ''}`}
+      className={`product ${productSelected === code ? 'product-selected' : ''}`}
       onClick={() => {
         chooseSelectedProduct(code);
         setProductSelected(code);

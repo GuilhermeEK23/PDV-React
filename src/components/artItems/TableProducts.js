@@ -1,6 +1,6 @@
 import './TableProducts.css';
 
-function TableProducts() {
+function TableProducts({listProductsSelected}) {
   return (
     <div className="grid-products">
       <div className='div-table-products'>
@@ -14,6 +14,14 @@ function TableProducts() {
             </tr>
           </thead>
           <tbody>
+            {listProductsSelected.map((item, key) => (
+              <tr key={key}>
+                <td>{item.Description}</td>
+                <td>{item.SalePrice}</td>
+                <td>{item.Quantity}</td>
+                <td>{item.SalePrice * item.Quantity}</td>
+              </tr>
+            ))}
             <tr>
               <td colSpan={4}></td>
             </tr>
