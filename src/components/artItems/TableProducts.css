@@ -1,0 +1,94 @@
+.grid-products{
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.div-table-products{
+  height: 80%;
+  background-color: #fdfdfd;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.table-products{
+  height: 100%;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.div-table-products::-webkit-scrollbar {
+  width: 0.5em;
+  background-color: #eee;
+}
+.div-table-products::-webkit-scrollbar-thumb {
+  background-color: #888;
+}
+
+.table-products th{
+  background-color: rgb(221, 221, 221);
+  font-weight: 700;
+  color: rgb(102, 102, 102);
+}
+
+.table-products tr{
+  height: 30px;
+}
+
+.table-products tr:last-child{
+  height: auto;
+}
+
+.table-products td, th{
+  line-height: 30px;
+  padding: 8px;
+  border: 1px solid black;
+  text-align: center;
+}
+
+.table-products th:nth-child(1), .table-products td:nth-child(1){
+  width: 60%;
+  text-align: start;
+}
+
+.summary{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  border-collapse: collapse;
+  margin-top: 5px;
+}
+
+.summary div{
+  border: 1px solid black;
+  line-height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.summary div:nth-child(2), .summary div:nth-child(4){
+  padding: 0 8px;
+  justify-content: space-between;
+}
+
+.summary div:nth-child(1), .summary div:nth-child(3){
+  padding: 0 8px;
+  justify-content: end;
+  gap: 30px;
+}
+
+.summary div:last-child{
+  grid-column: 1/3;
+  justify-content: space-between;
+  padding: 0 8px;
+  background-color: black;
+  color: white;
+  font-weight: bold;
+}
+
+.summary div:last-child span{
+  display: flex;
+  align-items: center;
+}
