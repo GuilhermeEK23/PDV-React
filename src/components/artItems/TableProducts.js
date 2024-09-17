@@ -17,9 +17,9 @@ function TableProducts({listProductsSelected}) {
             {listProductsSelected.map((item, key) => (
               <tr key={key}>
                 <td>{item.Description}</td>
-                <td>{item.SalePrice}</td>
-                <td>{item.Quantity}</td>
-                <td>{item.SalePrice * item.Quantity}</td>
+                <td>{item.SalePrice.toFixed(2)}</td>
+                <td>{item.Quantity.toFixed(3)}</td>
+                <td>{(item.SalePrice * item.Quantity).toFixed(2)}</td>
               </tr>
             ))}
             <tr>
