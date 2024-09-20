@@ -11,6 +11,16 @@ import GetOrder from '..//services/GetOrder.js';
 import PutOrders from '../services/PutOrders.js';
 
 function Pdv() {
+  const [keyHandled, setKeyHandled] = useState('');
+  const keysOpenSearchProduct = [
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',  // Números
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 
+    'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 
+    'u', 'v', 'w', 'x', 'y', 'z',                      // Letras minúsculas
+    'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 
+    'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 
+    'U', 'V', 'W', 'X', 'Y', 'Z'                       // Letras maiúsculas
+  ];
   const [modalSearchProduct, setModalSearchProduct] = useState(false);
   const [modalWeightProductIsOpen, setModalWeightProductIsOpen] = useState(false);
   const [products, setProducts] = useState([]);
@@ -64,31 +74,36 @@ function Pdv() {
   };
 
   const releaseOrder = async () => {
-    if (orderSelected === undefined) {
+    console.log(`comanda selecionada: ${orderSelected} lista de produtos: ${listProductsSelected.length} comanda: ${isOpenSearchOrder} produto: ${modalSearchProduct}`)
+    if (orderSelected === undefined || listProductsSelected.length === 0 || isOpenSearchOrder || modalSearchProduct ) {
       return;
     }
     const numberOrder = await GetOrder(orderSelected);
     await PutOrders(listProductsSelected, numberOrder[0].Code);
-    window.location.reload();
+    //window.location.reload();
   }
 
   useEffect(() => {
     const handleKeyDown = async (event) => {
       const products = await GetProducts(); // Chamando a função
+      console.log(event.key)
       if (products) {
         setProducts(products);
       } else {
         console.error('GetProducts retornou undefined');
       }
-      if (event.key === 'F2') {
+      if (keysOpenSearchProduct.includes(event.key) && !isOpenSearchOrder) {
+        setKeyHandled(event.key);
         setModalSearchProduct(true);
         return;
-      } else if (event.key === 'Escape') {
+      } else if (event.key === 'Escape' && ModalWeightProduct) {
         setModalSearchProduct(false);
-      } else if (event.key === 'F8') {
+      } else if (event.key === 'F4') {
         setIsOpenSearchOrder(true);
-      } else if (event.key === 'Enter') {
-        releaseOrder();
+      } else if (event.key === 'Enter' && !isOpenSearchOrder && !modalSearchProduct) {
+        //releaseOrder();
+      } else if (event.key === 'Enter' && isOpenSearchOrder){
+        setIsOpenSearchOrder(false);
       }
     };
 
@@ -98,7 +113,7 @@ function Pdv() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, [orderSelected]);
+  }, [orderSelected, modalSearchProduct, isOpenSearchOrder, listProductsSelected]);
   
   return (
     <>
@@ -113,7 +128,12 @@ function Pdv() {
         <ArtProducts />
         <ArtTotal />
       </section>
-      {modalSearchProduct ? <SearchProducts products={products} chooseSelectedProduct={chooseSelectedProduct} /> : null}
+      <SearchProducts
+        modalSearchProduct={modalSearchProduct}
+        products={products}
+        chooseSelectedProduct={chooseSelectedProduct}
+        keyHandled={keyHandled}
+      />
       <SearchOrder
         isOpenSearchOrder={isOpenSearchOrder}
         setIsOpenSearchOrder={setIsOpenSearchOrder}
