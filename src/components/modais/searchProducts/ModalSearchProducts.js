@@ -10,6 +10,8 @@ function ModalSearchProducts() {
   const inputRef = useRef(null);
   const [valueInputSearch, setValueInputSearch] = useState('');
   const { state, modalSearchProduct } = useContext(ModaisContext);
+  const [productSelectedIndex, setProductSelectedIndex] = useState(0);
+  const [productSelected, setProductSelected] = useState();
   const { products, setProducts } = useContext(ProductsContext);
   const [listProducts, setListProducts] = useState(products);
 
@@ -39,10 +41,37 @@ function ModalSearchProducts() {
     }
 
     filterProducts(valueInputSearch)
-  }, [valueInputSearch])
+  }, [valueInputSearch]);
+
+  useEffect(() => {
+    if (typeof listProducts[0] == "object") {
+      setProductSelected(listProducts[productSelectedIndex].Code);
+    }
+  }, [listProducts, productSelectedIndex])
+
+  const handleKeyDown = async (event) => {
+    if (listProducts.length === 0){
+      return;
+    }
+    if (event.key === 'ArrowDown') {
+      setProductSelectedIndex((prevIndex) => {
+        const nextIndex = Math.min(prevIndex + 1, listProducts.length - 1);
+        setProductSelected(listProducts[nextIndex].Code);
+        return nextIndex;
+      })
+    } else if (event.key === 'ArrowUp'){
+      setProductSelectedIndex((prevIndex) => {
+        const prev = Math.max(prevIndex - 1, 0);
+        setProductSelected(listProducts[prev].Code);
+        return prev;
+      })
+    } else if (event.key === 'Enter' && modalSearchProduct){
+      
+    }
+  };
 
   return (state.modalSearchProduct &&
-    <div className="modal-search-products">
+    <div onKeyDown={handleKeyDown} className="modal-search-products">
       <div className="content-modal-search-products">
         <div className='product-selection'>
           <div className='selection-header'>
