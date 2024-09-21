@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import GetProducts from "../../../services/GetProducts.js";
 import Product from './Product.js';
 import './ModalSearchProducts.css'
@@ -8,8 +8,10 @@ import { ModaisContext } from "../../../contexts/ModaisContext.js";
 
 function ModalSearchProducts() {
   const inputRef = useRef(null);
+  const [valueInputSearch, setValueInputSearch] = useState('');
   const { state, modalSearchProduct } = useContext(ModaisContext);
   const { products, setProducts } = useContext(ProductsContext);
+  const [listProducts, setListProducts] = useState(products);
 
   useEffect(() => {
     // Cria e executa logo em seguida uma função dentro do useEffect apenas uma vez para não ficar em loop
@@ -26,6 +28,19 @@ function ModalSearchProducts() {
     }
   }, [state.modalSearchProduct, setProducts]);
 
+  
+  useEffect(() => {
+    const filterProducts = (e) => {
+      setListProducts(
+        products.filter(
+          (item) => parseInt(item.Code) === (parseInt(e)) || item.Description.toUpperCase().includes(e.toUpperCase())
+        )
+      );
+    }
+
+    filterProducts(valueInputSearch)
+  }, [valueInputSearch])
+
   return (state.modalSearchProduct &&
     <div className="modal-search-products">
       <div className="content-modal-search-products">
@@ -34,7 +49,7 @@ function ModalSearchProducts() {
             <h1>Selecionar</h1>
           </div>
           <div className="selection-body">
-            {products.map((item, key) => (
+            {listProducts.map((item, key) => (
               <Product
                 key={key}
                 code={item.Code}
@@ -48,6 +63,8 @@ function ModalSearchProducts() {
             <input
               type="text"
               placeholder='Produto'
+              value={valueInputSearch}
+              onChange={(e) => setValueInputSearch(e.target.value)}
               ref={inputRef}
             />
           </div>
