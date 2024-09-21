@@ -1,14 +1,8 @@
 import './Product.css';
 
-function Product({code, description, stock, price, productSelected, chooseSelectedProduct, setProductSelected}){
+function Product({code, description, price, stock}){
   return (
-    <div 
-      className={`product ${productSelected === code ? 'product-selected' : ''}`}
-      onClick={() => {
-        chooseSelectedProduct(code);
-        setProductSelected(code);
-      }}
-    >
+    <div>
       <div className="image-product">
         <img src="http://localhost:8081/content/img/no_image.png" alt="productImage" />
       </div>
