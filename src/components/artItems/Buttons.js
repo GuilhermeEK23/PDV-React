@@ -1,6 +1,6 @@
 import './Buttons.css';
 
-function Buttons({  }) {
+function Buttons() {
 
   return (
     <div className="buttons">

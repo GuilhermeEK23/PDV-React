@@ -2,7 +2,7 @@ import './ArtItens.css';
 import TableProducts from './TableProducts.js';
 import Buttons from './Buttons.js';
 
-function ArtItens({}) {
+function ArtItens() {
   return (
     <article className="itens">
       <div className='content-itens'>

@@ -1,6 +1,6 @@
 import './TableProducts.css';
 
-function TableProducts({listProductsSelected}) {
+function TableProducts() {
   return (
     <div className="grid-products">
       <div className='div-table-products'>
