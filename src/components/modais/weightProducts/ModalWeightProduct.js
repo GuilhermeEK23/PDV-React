@@ -52,15 +52,15 @@ function ModalWeightProduct({ onConfirm }) {
   };
 
   const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
+    if (event.key === "Enter" && !Number.isNaN(weight) && weight > 0) {
       confirmWeight();
     }
   };
 
   useEffect(() => {
     if (state.modalWeightProduct && inputRef.current) {
-      fetchWeight();
       inputRef.current.focus();
+      fetchWeight();
     }
     setWeight("");
   }, [state.modalWeightProduct]);
@@ -94,7 +94,6 @@ function ModalWeightProduct({ onConfirm }) {
               >
                 OK
               </button>
-              :
             </div>
           </div>
         </div>

@@ -2,12 +2,12 @@ import './ArtItens.css';
 import TableProducts from './TableProducts.js';
 import Buttons from './Buttons.js';
 
-function ArtItens() {
+function ArtItens({releaseOrder}) {
   return (
     <article className="itens">
       <div className='content-itens'>
         <TableProducts />
-        <Buttons />
+        <Buttons releaseOrder={releaseOrder} />
       </div>
     </article>
   )

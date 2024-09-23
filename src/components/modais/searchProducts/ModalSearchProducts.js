@@ -27,7 +27,7 @@ function ModalSearchProducts() {
     // Cria e executa logo em seguida uma função dentro do useEffect apenas uma vez para não ficar em loop
     const fetchProducts = async () => {
       const data = await GetProducts();
-      setProducts(data); // Define os produtos com o resultado que vem da API
+      setProducts(data || []); // Define os produtos com o resultado que vem da API
     };
 
     fetchProducts();
@@ -154,6 +154,11 @@ function ModalSearchProducts() {
                 <h1>Selecionar</h1>
               </div>
               <div className="selection-body">
+                {products.length === 0 ? (
+                  <h2 style={{ color: "red" }}>
+                    Sem produtos ou sem conexão com servidor
+                  </h2>
+                ) : null}
                 {filteredProducts.map((item, key) => (
                   <Product
                     key={key}

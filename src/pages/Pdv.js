@@ -4,10 +4,16 @@ import ArtProducts from "../components/artProduct/ArtProduct.js";
 import ArtTotal from "../components/artTotal/ArtTotal.js";
 import SearchProducts from "../components/modais/searchProducts/ModalSearchProducts.js";
 import SearchOrder from "../components/modais/searchOrder/ModalSearchOrder.js";
+import GetOrder from "../services/GetOrder.js";
+import PutOrders from "../services/PutOrders.js";
 import { useContext, useEffect } from "react";
 import { ModaisContext } from "../contexts/ModaisContext.js";
+import { CartContext } from "../contexts/CartContext.js";
+import { OrderContext } from "../contexts/OrderContext.js";
 
 function Pdv() {
+  const { cartProducts } = useContext(CartContext);
+  const { numberOrder } = useContext(OrderContext);
   const {
     state,
     openModalSearchProduct,
@@ -86,19 +92,14 @@ function Pdv() {
   // useEffect para adicionar a escuta de keydown na tela
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (
-        keysOpenModalSearchProduct.includes(event.key) &&
-        !state.modalSearchProduct &&
-        !state.modalSearchOrder &&
-        !state.modalWeightProduct
-      ) {
+      const isAnyModalOpen =
+        state.modalSearchOrder ||
+        state.modalSearchProduct ||
+        state.modalWeightProduct;
+
+      if (keysOpenModalSearchProduct.includes(event.key) && !isAnyModalOpen) {
         openModalSearchProduct();
-      } else if (
-        event.key === "F4" &&
-        !state.modalSearchOrder &&
-        !state.modalSearchProduct &&
-        !state.modalWeightProduct
-      ) {
+      } else if (event.key === "F4" && !isAnyModalOpen) {
         openModalSearchOrder();
       } else if (event.key === "Escape") {
         if (state.modalSearchProduct && !state.modalWeightProduct) {
@@ -108,6 +109,14 @@ function Pdv() {
         } else if (state.modalWeightProduct) {
           closeModalWeightProduct();
         }
+      } else if (
+        event.key === "Enter" &&
+        cartProducts.length > 0 &&
+        numberOrder !== undefined &&
+        !isAnyModalOpen
+      ) {
+        console.log("pode chamar o releaseOrder");
+        releaseOrder();
       }
     };
 
@@ -125,12 +134,28 @@ function Pdv() {
     closeModalSearchOrder,
     openModalWeightProduct,
     closeModalWeightProduct,
+    cartProducts.length,
+    numberOrder,
   ]);
+
+  const releaseOrder = async () => {
+    if (numberOrder === undefined || cartProducts.length === 0) {
+      return;
+    }
+    try {
+      const number = await GetOrder(numberOrder);
+
+      await PutOrders(cartProducts, number[0].Code);
+      window.location.reload();
+    } catch (error) {
+      alert("Erro de conexão com o servidor");
+    }
+  };
 
   return (
     <>
       <section className="widget-grid">
-        <ArtItens />
+        <ArtItens releaseOrder={releaseOrder} />
         <ArtProducts />
         <ArtTotal />
       </section>
