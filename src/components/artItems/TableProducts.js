@@ -1,6 +1,11 @@
+import { useContext } from 'react';
 import './TableProducts.css';
+import { CartContext } from '../../contexts/CartContext';
 
 function TableProducts() {
+  const {cartProducts} = useContext(CartContext);
+  console.log(cartProducts);
+
   return (
     <div className="grid-products">
       <div className='div-table-products'>
@@ -14,14 +19,14 @@ function TableProducts() {
             </tr>
           </thead>
           <tbody>
-            {/*listProductsSelected.map((item, key) => (
+            {cartProducts.map((item, key) => (
               <tr key={key}>
                 <td>{item.Description}</td>
                 <td>{item.SalePrice.toFixed(2)}</td>
                 <td>{item.Quantity.toFixed(3)}</td>
                 <td>{(item.SalePrice * item.Quantity).toFixed(2)}</td>
               </tr>
-            ))*/}
+            ))}
             <tr>
               <td colSpan={4}></td>
             </tr>

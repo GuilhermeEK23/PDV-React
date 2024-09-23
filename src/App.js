@@ -1,4 +1,5 @@
 import './App.css';
+import CartProvider from './contexts/CartContext.js';
 import ModaisProvider from './contexts/ModaisContext.js';
 import ProductsProvider from './contexts/ProductsContext.js';
 import Pdv from './pages/Pdv.js';
@@ -9,7 +10,9 @@ function App() {
       <div className='content'>
         <ProductsProvider>
           <ModaisProvider>
-            <Pdv />
+            <CartProvider>
+              <Pdv />
+            </CartProvider>
           </ModaisProvider>
         </ProductsProvider>
       </div>
