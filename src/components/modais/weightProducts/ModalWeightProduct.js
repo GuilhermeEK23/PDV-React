@@ -7,6 +7,43 @@ function ModalWeightProduct({ onConfirm }) {
   const inputRef = useRef();
   const [weight, setWeight] = useState("");
 
+  const fetchWeight = async () => {
+    try {
+      // Conectar ao servidor WebSocket
+      const socket = new WebSocket("ws://localhost:4000");
+
+      const pedirPeso = () => {
+        socket.send("solicitarPeso");
+      };
+
+      // Quando a conexão for estabelecida
+      socket.onopen = () => {
+        console.log("Conexão WebSocket estabelecida");
+        pedirPeso();
+      };
+
+      // Quando receber uma mensagem do servidor
+      socket.onmessage = (event) => {
+        const peso = parseFloat(event.data.replace(",", "."));
+        setWeight(peso);
+        console.log(peso);
+        confirmWeight();
+      };
+
+      // Tratar erros do WebSocket
+      socket.onerror = (error) => {
+        console.error("Erro no WebSocket:", error);
+      };
+
+      // Quando a conexão for fechada
+      socket.onclose = () => {
+        console.log("Conexão WebSocket fechada");
+      };
+    } catch (error) {
+      console.error("Erro ao obter o peso:", error);
+    }
+  };
+
   const confirmWeight = () => {
     if (weight) {
       onConfirm(weight);
@@ -22,6 +59,7 @@ function ModalWeightProduct({ onConfirm }) {
 
   useEffect(() => {
     if (state.modalWeightProduct && inputRef.current) {
+      fetchWeight();
       inputRef.current.focus();
     }
     setWeight("");
