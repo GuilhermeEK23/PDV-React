@@ -7,7 +7,6 @@ function SearchOrder({ isOpenSearchOrder, setIsOpenSearchOrder, setOrderSelected
 
   const setNewOrderSelected = () => {
     setOrderSelected(numberOrder);
-    setIsOpenSearchOrder(false);
   }
 
   useEffect(() => {

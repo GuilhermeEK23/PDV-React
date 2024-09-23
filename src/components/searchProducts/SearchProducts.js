@@ -2,20 +2,28 @@ import { useEffect, useRef, useState } from 'react';
 import Product from './Product.js';
 import './SearchProducts.css'
 
-function SearchProducts({ products, chooseSelectedProduct }) {
+function SearchProducts({ products, chooseSelectedProduct, modalSearchProduct, keyHandled }) {
+  const [searchProduct, setSearchProduct] = useState('');
   const [productSelectedIndex, setProductSelectedIndex] = useState(0);
   const [productSelected, setProductSelected] = useState();
   const [listProducts, setListProducts] = useState(products);
   const inputRef = useRef(null);
 
   const filterProducts = (e) => {
+    setSearchProduct(e);
     const listProducts = products;
-    setListProducts(listProducts.filter((item) => parseInt(item.Code) === (parseInt(e)) || item.Description.toUpperCase().includes(e.toUpperCase())));
+    setListProducts(
+      listProducts.filter(
+        (item) => parseInt(item.Code) === (parseInt(e)) || item.Description.toUpperCase().includes(e.toUpperCase())
+      )
+    );
   }
 
   useEffect(() => {
+    setSearchProduct(keyHandled);
     inputRef.current.focus();
-  }, [])
+    filterProducts(keyHandled);
+  }, [modalSearchProduct])
 
   useEffect(() => {
     if (typeof listProducts[0] == "object") {
@@ -39,12 +47,13 @@ function SearchProducts({ products, chooseSelectedProduct }) {
         setProductSelected(listProducts[prev].Code);
         return prev;
       })
-    } else if (event.key === 'Enter'){
+    } else if (event.key === 'Enter' && modalSearchProduct){
       chooseSelectedProduct(productSelected)
     }
   };
 
-  return (
+  if (modalSearchProduct) {
+    return (
     <div onKeyDown={handleKeyDown} className="modal-search-products">
       <div className="content-modal-search-products">
         <div className='product-selection'>
@@ -66,12 +75,21 @@ function SearchProducts({ products, chooseSelectedProduct }) {
             ))}
           </div>
           <div className="selection-footer">
-            <input ref={inputRef} type="text" placeholder='Produto' onChange={(e) => { filterProducts(e.target.value) }} />
+            <input
+              ref={inputRef}
+              type="text"
+              placeholder='Produto'
+              value={searchProduct}
+              onChange={(e) => { filterProducts(e.target.value) }}
+            />
           </div>
         </div>
       </div>
     </div>
   )
+  } else {
+    return <div ref={inputRef}></div>;
+  }
 }
 
 export default SearchProducts;
