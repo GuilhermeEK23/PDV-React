@@ -4,7 +4,6 @@ import { CartContext } from '../../contexts/CartContext';
 
 function TableProducts() {
   const {cartProducts} = useContext(CartContext);
-  console.log(cartProducts);
 
   return (
     <div className="grid-products">
