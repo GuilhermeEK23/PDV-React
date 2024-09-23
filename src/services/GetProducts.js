@@ -8,7 +8,6 @@ async function GetProducts(){
   })
   .catch(error => {
     console.log('Erro: ' + error);
-    return [];
   })
 }
 

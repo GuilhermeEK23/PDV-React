@@ -1,131 +1,168 @@
-import './Pdv.css';
-import ArtItens from '../components/artItems/ArtItens.js';
-import ArtProducts from '../components/artProduct/ArtProduct.js';
-import ArtTotal from '../components/artTotal/ArtTotal.js';
-import SearchProducts from '../components/searchProducts/SearchProducts.js'
-import SearchOrder from '../components/searchOrder/SearchOrder.js';
-import ModalWeightProduct from '../components/searchProducts/ModalWeightProduct.js';
-import { useEffect, useState } from 'react';
-import GetProducts from '../services/GetProducts.js';
-import GetOrder from '..//services/GetOrder.js';
-import PutOrders from '../services/PutOrders.js';
+import "./Pdv.css";
+import ArtItens from "../components/artItems/ArtItens.js";
+import ArtProducts from "../components/artProduct/ArtProduct.js";
+import ArtTotal from "../components/artTotal/ArtTotal.js";
+import SearchProducts from "../components/modais/searchProducts/ModalSearchProducts.js";
+import SearchOrder from "../components/modais/searchOrder/ModalSearchOrder.js";
+import GetOrder from "../services/GetOrder.js";
+import PutOrders from "../services/PutOrders.js";
+import { useContext, useEffect } from "react";
+import { ModaisContext } from "../contexts/ModaisContext.js";
+import { CartContext } from "../contexts/CartContext.js";
+import { OrderContext } from "../contexts/OrderContext.js";
 
 function Pdv() {
-  const [modalSearchProduct, setModalSearchProduct] = useState(false);
-  const [modalWeightProductIsOpen, setModalWeightProductIsOpen] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [listProductsSelected, setListProductsSelected] = useState([]);
-  const [isOpenSearchOrder, setIsOpenSearchOrder] = useState(false);
-  const [orderSelected, setOrderSelected] = useState();
-  const [productToAdd, setProductToAdd] = useState(null);
+  const { cartProducts } = useContext(CartContext);
+  const { numberOrder } = useContext(OrderContext);
+  const {
+    state,
+    openModalSearchProduct,
+    closeModalSearchProduct,
+    openModalSearchOrder,
+    closeModalSearchOrder,
+    openModalWeightProduct,
+    closeModalWeightProduct,
+  } = useContext(ModaisContext);
 
-  const handleWeightConfirm = (weight) => {
-    let WeightProduct = weight; // Atualiza o estado com o novo peso
-    setModalWeightProductIsOpen(false); // Fecha o modal
-    if (productToAdd) {
-      addProductToList(productToAdd, WeightProduct)
-    }
-  }
-  const addProductToList = (product, weight) => {
-    setListProductsSelected((prevProductsSelected) => {
-      const productInList = prevProductsSelected.find((item) => item.Code === product.Code);
+  const keysOpenModalSearchProduct = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9", // Números
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j",
+    "k",
+    "l",
+    "m",
+    "n",
+    "o",
+    "p",
+    "q",
+    "r",
+    "s",
+    "t",
+    "u",
+    "v",
+    "w",
+    "x",
+    "y",
+    "z", // Letras minúsculas
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I",
+    "J",
+    "K",
+    "L",
+    "M",
+    "N",
+    "O",
+    "P",
+    "Q",
+    "R",
+    "S",
+    "T",
+    "U",
+    "V",
+    "W",
+    "X",
+    "Y",
+    "Z", // Letras maiúsculas
+  ];
 
-      if (productInList) {
-        return prevProductsSelected.map((item) => {
-          if (item.Code === product.Code) {
-            return {
-              ...item,
-              Quantity: item.Quantity + (product.Unit === 'KG' ? weight : 1),
-            };
-          }
-          return item;
-        });
-      }
-
-      return [
-        ...prevProductsSelected,
-        { ...product, Quantity: product.Unit === 'KG' ? weight : 1 },
-      ];
-    });
-    setModalSearchProduct(false);
-  };
-
-  const chooseSelectedProduct = async (codeProduct) => {
-    for (const product of products) {
-      if (product.Code === codeProduct) {
-        if (product.Unit === 'KG') {
-          setProductToAdd(product); // Salva o produto no estado
-          setModalWeightProductIsOpen(true); // Abre o modal para pegar o peso
-        } else {
-          addProductToList(product, 1); // Produto sem peso
-        }
-      }
-    }
-  };
-
-  const releaseOrder = async () => {
-    if (orderSelected === undefined) {
-      return;
-    }
-    const numberOrder = await GetOrder(orderSelected);
-    await PutOrders(listProductsSelected, numberOrder[0].Code);
-    window.location.reload();
-  }
-
+  // useEffect para adicionar a escuta de keydown na tela
   useEffect(() => {
-    const handleKeyDown = async (event) => {
-      const products = await GetProducts(); // Chamando a função
-      if (products) {
-        setProducts(products);
-      } else {
-        console.error('GetProducts retornou undefined');
-      }
-      if (event.key === 'F2') {
-        setModalSearchProduct(true);
-        return;
-      } else if (event.key === 'Escape') {
-        setModalSearchProduct(false);
-      } else if (event.key === 'F8') {
-        setIsOpenSearchOrder(true);
-      } else if (event.key === 'Enter') {
+    const handleKeyDown = (event) => {
+      const isAnyModalOpen =
+        state.modalSearchOrder ||
+        state.modalSearchProduct ||
+        state.modalWeightProduct;
+
+      if (keysOpenModalSearchProduct.includes(event.key) && !isAnyModalOpen) {
+        openModalSearchProduct();
+      } else if (event.key === "F4" && !isAnyModalOpen) {
+        openModalSearchOrder();
+      } else if (event.key === "Escape") {
+        if (state.modalSearchProduct && !state.modalWeightProduct) {
+          closeModalSearchProduct();
+        } else if (state.modalSearchOrder) {
+          closeModalSearchOrder();
+        } else if (state.modalWeightProduct) {
+          closeModalWeightProduct();
+        }
+      } else if (
+        event.key === "Enter" &&
+        cartProducts.length > 0 &&
+        numberOrder !== undefined &&
+        !isAnyModalOpen
+      ) {
+        console.log("pode chamar o releaseOrder");
         releaseOrder();
       }
     };
 
-    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener("keydown", handleKeyDown);
 
-    // Cleanup - Remove o listener quando o componente desmonta
     return () => {
-      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [orderSelected]);
-  
+  }, [
+    state,
+    keysOpenModalSearchProduct,
+    openModalSearchProduct,
+    closeModalSearchProduct,
+    openModalSearchOrder,
+    closeModalSearchOrder,
+    openModalWeightProduct,
+    closeModalWeightProduct,
+    cartProducts.length,
+    numberOrder,
+  ]);
+
+  const releaseOrder = async () => {
+    if (numberOrder === undefined || cartProducts.length === 0) {
+      return;
+    }
+    try {
+      const number = await GetOrder(numberOrder);
+
+      await PutOrders(cartProducts, number[0].Code);
+      window.location.reload();
+    } catch (error) {
+      alert("Erro de conexão com o servidor");
+    }
+  };
+
   return (
     <>
-      <section className='widget-grid'>
-        <ArtItens
-          listProductsSelected={listProductsSelected}
-          isOpenSearchOrder={isOpenSearchOrder}
-          setIsOpenSearchOrder={setIsOpenSearchOrder}
-          orderSelected={orderSelected}
-          releaseOrder={releaseOrder}
-        />
+      <section className="widget-grid">
+        <ArtItens releaseOrder={releaseOrder} />
         <ArtProducts />
         <ArtTotal />
       </section>
-      {modalSearchProduct ? <SearchProducts products={products} chooseSelectedProduct={chooseSelectedProduct} /> : null}
-      <SearchOrder
-        isOpenSearchOrder={isOpenSearchOrder}
-        setIsOpenSearchOrder={setIsOpenSearchOrder}
-        setOrderSelected={setOrderSelected}
-      />
-      <ModalWeightProduct
-        modalWeightProductIsOpen={modalWeightProductIsOpen}
-        setModalWeightProductIsOpen={setModalWeightProductIsOpen}
-        handleWeightConfirm={handleWeightConfirm}
-      />
+      <SearchProducts />
+      <SearchOrder />
     </>
-  )
+  );
 }
 
 export default Pdv;

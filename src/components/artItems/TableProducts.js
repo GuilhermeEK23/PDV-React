@@ -1,6 +1,10 @@
+import { useContext } from 'react';
 import './TableProducts.css';
+import { CartContext } from '../../contexts/CartContext';
 
-function TableProducts({listProductsSelected}) {
+function TableProducts() {
+  const {cartProducts} = useContext(CartContext);
+
   return (
     <div className="grid-products">
       <div className='div-table-products'>
@@ -14,7 +18,7 @@ function TableProducts({listProductsSelected}) {
             </tr>
           </thead>
           <tbody>
-            {listProductsSelected.map((item, key) => (
+            {cartProducts.map((item, key) => (
               <tr key={key}>
                 <td>{item.Description}</td>
                 <td>{item.SalePrice.toFixed(2)}</td>
@@ -28,16 +32,8 @@ function TableProducts({listProductsSelected}) {
           </tbody>
         </table>
       </div>
-      <div className="summary">
-        <div>Itens <span>0(0)</span></div>
-        <div>Desconto <span>0,00</span></div>
-        <div>Valor pago <span>0,00</span></div>
-        <div>Troco <span>0,00</span></div>
-        <div className="total">
-          <span>Total:</span>
-          <span><img src="http://localhost:8081/content/img/logo-white.png" alt="logo white" height={25} /></span>
-          <span>0,00</span>
-        </div>
+      <div className="logo">
+        <img src="http://localhost:8081/content/img/logo-white.png" alt="logo white" height={25} />
       </div>
     </div>
   )

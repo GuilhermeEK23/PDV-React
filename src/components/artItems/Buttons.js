@@ -1,22 +1,26 @@
-import { useEffect, useState } from 'react';
-import './Buttons.css';
+import { useContext } from "react";
 
-function Buttons({ setIsOpenSearchOrder, orderSelected, releaseOrder }) {
-  const [order, setOrder] = useState();
+import "./Buttons.css";
+import { OrderContext } from "../../contexts/OrderContext.js";
+import { ModaisContext } from "../../contexts/ModaisContext.js";
 
-  useEffect(() => {
-    setOrder(orderSelected);
-  }, [orderSelected])
+function Buttons({ releaseOrder }) {
+  const { openModalSearchOrder } = useContext(ModaisContext);
+  const { numberOrder } = useContext(OrderContext);
 
   return (
     <div className="buttons">
       <div>Comandas</div>
-      <div><span>{order}</span></div>
-      <div onClick={() => { window.location.reload() }}>Limpar</div>
-      <div onClick={() => setIsOpenSearchOrder(true)}>Buscar comanda</div>
-      <div onClick={() => releaseOrder()}>Salvar</div>
+      <div>
+        <span>{numberOrder}</span>
+      </div>
+      <div onClick={() => {window.location.reload();}}>
+        Limpar
+      </div>
+      <div onClick={openModalSearchOrder}>Buscar comanda</div>
+      <div onClick={releaseOrder}>Salvar</div>
     </div>
-  )
+  );
 }
 
 export default Buttons;
