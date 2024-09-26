@@ -25,7 +25,7 @@ function ArtTotal() {
         </section>
         <section>
           <h1>
-            R$ <span>{total.toFixed(2)}</span>
+            R$ <span>{total.toFixed(2).replace(".",',')}</span>
           </h1>
         </section>
       </div>

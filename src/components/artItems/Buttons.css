@@ -1,41 +1,60 @@
-.buttons{
-  height: 150px;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 1fr 2fr;
-  gap: 5px;
-  margin-top: 15px;
-}
-
-.buttons div{
+.orderButtons{
+  height: 25%;
   width: 100%;
-  height: 100%;
+  display: flex;
+  padding: 5px;
+  flex-direction: column;
+}
+.orderInfo{
+  height: 50%;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+.numberOrder{
+  width: 60%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  font-size: large;
+  font-weight: bold;
+}
+.numberOrder span{
+  width: 55%;
+  height: 80%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid white;
-  border-radius: 4px;
-  color: white;
+  background-color: #D9D9D9;
+  border-radius: 8px;
+  box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);
+  border: 1px solid #92A2A8;
+}
+.buttons{
+  height: 50%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+.buttons button{
+  height: 85%;
+  width: 25%;
   cursor: pointer;
+  border: none;
+  color: #FFF;
+  border-radius: 8px;
+  font-size: smaller;
 }
-
-.buttons div:nth-child(1){
-  background-color: rgb(67, 135, 191);
+.buttons button:nth-child(1){
+  background-color: #DB4A67;
 }
-
-.buttons div:nth-child(2){
-  grid-column: 2/4;
-  color: black;
+.buttons button:nth-child(2){
+  background-color: #3F9DC0;
 }
-
-.buttons div:nth-child(3){
-  background-color: rgb(219, 74, 103);
-}
-
-.buttons div:nth-child(4){
-  background-color: rgb(146, 162, 168);
-}
-
-.buttons div:nth-child(5){
-  background-color: rgb(53, 110, 53);
+.buttons button:nth-child(3){
+  background-color: #356E35;
 }

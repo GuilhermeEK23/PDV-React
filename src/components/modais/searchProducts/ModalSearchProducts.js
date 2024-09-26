@@ -32,6 +32,7 @@ function ModalSearchProducts() {
 
     fetchProducts();
   }, [setProducts]);
+
   // Foca no input apenas quando o componente referenciado estiver montado
   useEffect(() => {
     if (state.modalSearchProduct && inputRef.current) {
@@ -52,9 +53,13 @@ function ModalSearchProducts() {
       )
     : products;
 
+  const selectProduct = (code) => {
+    filteredProducts.find((item, index) => {item.Code === code && setProductSelectedIndex(index)});
+  }
+
   //useEffect responsável por definir o produto selecionado
   useEffect(() => {
-    if (state.modalSearchProduct && filteredProducts.length > 0) {
+    if (state.modalSearchProduct && filteredProducts.length > productSelectedIndex) {
       setProductSelected(filteredProducts[productSelectedIndex].Code);
     }
   }, [filteredProducts, productSelectedIndex, state.modalSearchProduct]);
@@ -68,7 +73,6 @@ function ModalSearchProducts() {
   };
 
   const addProductToCart = async (productSelected) => {
-    // console.log("produto selecionado:", productSelected);
     const product = products.filter(
       (item) => parseInt(item.Code) === parseInt(productSelected)
     )[0];
@@ -113,6 +117,7 @@ function ModalSearchProducts() {
         return [...prevCart, { ...product, Quantity: 1 }];
       });
     }
+    closeModalSearchProduct();
   };
 
   // Função identificar o keyDown enquanto o foco estiver no input e mudar o produto selecionado a depender das teclas ArrowDown e ArrowUp, e adicioner o produto selecionado no Cart caso a tecla seja Enter
@@ -132,7 +137,6 @@ function ModalSearchProducts() {
       });
     } else if (event.key === "Enter" && state.modalSearchProduct) {
       addProductToCart(productSelected);
-      closeModalSearchProduct();
     }
   };
 
@@ -167,6 +171,8 @@ function ModalSearchProducts() {
                     stock={item.RealStock}
                     price={item.SalePrice}
                     productSelected={productSelected}
+                    selectProduct={selectProduct}
+                    addProductToCart={addProductToCart}
                   />
                 ))}
               </div>

@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import './TableProducts.css';
+import logo_white from '../../assets/logo-white.png';
 import { CartContext } from '../../contexts/CartContext';
 
 function TableProducts() {
@@ -33,7 +34,7 @@ function TableProducts() {
         </table>
       </div>
       <div className="logo">
-        <img src="http://localhost:8081/content/img/logo-white.png" alt="logo white" height={25} />
+        <img src={logo_white} alt="logo white" height={25} />
       </div>
     </div>
   )

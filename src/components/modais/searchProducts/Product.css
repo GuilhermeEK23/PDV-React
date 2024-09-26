@@ -1,25 +1,23 @@
 .product{
   cursor: pointer;
   display: flex;
+  justify-content: space-around;
   border: 1px solid black;
   padding: 20px;
   justify-content: space-between;
 }
-.image-product{
-  width: 30%;
-}
-.info-product{
-  width: 70%;
-  display: flex;
-  flex-direction: column;
-}
 .name-product{
-  height: 50%;
+  width: 50%;
+  height: 100%;
+  font-size: large;
 }
-.values-product{
+.price-product{
+  width: 50%;
   height: 50%;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+  font-size: x-large;
+  font-weight: bolder;
 }
 .product-selected{
   background-color: rgba(0, 0, 0, 0.5);

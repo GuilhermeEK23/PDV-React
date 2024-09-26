@@ -9,16 +9,21 @@ function Buttons({ releaseOrder }) {
   const { numberOrder } = useContext(OrderContext);
 
   return (
-    <div className="buttons">
-      <div>Comandas</div>
-      <div>
-        <span>{numberOrder}</span>
+    <div className="orderButtons">
+      <div className="orderInfo">
+        <p>F4 - Para buscar comandas</p>
+        <div className="numberOrder">
+          <p>COMANDA</p>
+          <span>{numberOrder}</span>
+        </div>
       </div>
-      <div onClick={() => {window.location.reload();}}>
-        Limpar
+      <div className="buttons">
+        <button onClick={() => {window.location.reload();}}>
+          LIMPAR
+        </button>
+        <button onClick={openModalSearchOrder}>BUSCAR</button>
+        <button onClick={releaseOrder}>GRAVAR</button>
       </div>
-      <div onClick={openModalSearchOrder}>Buscar comanda</div>
-      <div onClick={releaseOrder}>Salvar</div>
     </div>
   );
 }

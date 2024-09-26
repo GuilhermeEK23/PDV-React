@@ -1,6 +1,6 @@
 import "./Pdv.css";
 import ArtItens from "../components/artItems/ArtItens.js";
-import ArtProducts from "../components/artProduct/ArtProduct.js";
+import ArtEmpresa from "../components/artProduct/ArtEmpresa.js";
 import ArtTotal from "../components/artTotal/ArtTotal.js";
 import SearchProducts from "../components/modais/searchProducts/ModalSearchProducts.js";
 import SearchOrder from "../components/modais/searchOrder/ModalSearchOrder.js";
@@ -156,7 +156,7 @@ function Pdv() {
     <>
       <section className="widget-grid">
         <ArtItens releaseOrder={releaseOrder} />
-        <ArtProducts />
+        <ArtEmpresa />
         <ArtTotal />
       </section>
       <SearchProducts />
