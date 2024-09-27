@@ -77,9 +77,11 @@ function ModalSearchProducts() {
       (item) => parseInt(item.Code) === parseInt(productSelected)
     )[0];
 
-    const isProductInKg = product.Unit === "KG";
+    if (!product){
+      return;
+    }
 
-    if (isProductInKg) {
+    if (product.Unit === "KG") {
       const weight = await awaitWeightProduct();
       if (!weight) return;
 
