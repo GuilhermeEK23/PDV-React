@@ -98,7 +98,8 @@ function ModalSearchProducts() {
         //     return item;
         //   });
         // }
-        return [...prevCart, { ...product, Quantity: parseFloat(weight), Index: prevCart.length + 1 }];
+        const maxIndex = prevCart.length > 0 ? Math.max(...prevCart.map((item) => item.Index)) : 0;
+        return [...prevCart, { ...product, Quantity: parseFloat(weight), Index: maxIndex + 1 }];
       });
     } else {
       // para produtos que não são por peso
@@ -116,7 +117,11 @@ function ModalSearchProducts() {
             return item;
           });
         }
-        return [...prevCart, { ...product, Quantity: 1, Index: prevCart.length + 1 }];
+
+        // Encontra o maior valor de Index no carrinho atual
+        const maxIndex = prevCart.length > 0 ? Math.max(...prevCart.map((item) => item.Index)) : 0;
+
+        return [...prevCart, { ...product, Quantity: 1, Index: maxIndex + 1 }];
       });
     }
     closeModalSearchProduct();
