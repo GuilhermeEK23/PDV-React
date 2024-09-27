@@ -5,7 +5,7 @@ function ArtEmpresa(){
   return (
     <article className="artEmpresa">
       <div className='logoEmpresa'>
-        <img src={logo_empresa} width={530} alt="logo empresa" />
+        <img src={logo_empresa} alt="logo empresa" />
       </div>
     </article>
   )

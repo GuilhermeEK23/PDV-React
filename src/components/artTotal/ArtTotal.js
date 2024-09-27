@@ -13,6 +13,8 @@ function ArtTotal() {
         (ArtTotal, cartItem) => { return (ArtTotal + cartItem.SalePrice * cartItem.Quantity)}, 0
       );
       setTotal(totalPrice);
+    } else {
+      setTotal(0);
     }
   }, [cartProducts]);
 

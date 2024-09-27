@@ -1,10 +1,16 @@
 import { useContext } from 'react';
+import { FaTrashAlt } from "react-icons/fa";
 import './TableProducts.css';
 import logo_white from '../../assets/logo-white.png';
 import { CartContext } from '../../contexts/CartContext';
 
 function TableProducts() {
-  const {cartProducts} = useContext(CartContext);
+  const {cartProducts, setCartProducts} = useContext(CartContext);
+
+  const deleteProduct = (code) => {
+    const newCartProducts = cartProducts.filter((item) => item.Code !== code);
+    setCartProducts(newCartProducts);
+  }
 
   return (
     <div className="grid-products">
@@ -16,6 +22,7 @@ function TableProducts() {
               <th>Preço</th>
               <th>Qtd</th>
               <th>Total</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -25,10 +32,11 @@ function TableProducts() {
                 <td>{item.SalePrice.toFixed(2)}</td>
                 <td>{item.Quantity.toFixed(3)}</td>
                 <td>{(item.SalePrice * item.Quantity).toFixed(2)}</td>
+                <td><FaTrashAlt onClick={() => deleteProduct(item.Code)} className='icon-trash' /></td>
               </tr>
             ))}
             <tr>
-              <td colSpan={4}></td>
+              <td colSpan={5}></td>
             </tr>
           </tbody>
         </table>

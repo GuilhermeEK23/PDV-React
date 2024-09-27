@@ -52,10 +52,18 @@
   text-align: start;
 }
 
+.table-products th:nth-child(5), .table-products td:nth-child(5){
+  width: 10%;
+}
+
 .logo{
   width: 100%;
   display: flex;
   justify-content: center;
   padding: 4px;
   background-color: black;
+}
+
+.icon-trash{
+  cursor: pointer;
 }
