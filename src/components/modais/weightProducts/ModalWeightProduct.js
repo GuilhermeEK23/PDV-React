@@ -6,6 +6,9 @@ function ModalWeightProduct({ onConfirm }) {
   const { state, closeModalWeightProduct } = useContext(ModaisContext);
   const inputRef = useRef();
   const [weight, setWeight] = useState("");
+  const [error, setError] = useState("");
+  const [isFetching, setIsFetching] = useState(false);
+  const intervalRef = useRef(null);
 
   const fetchWeight = async () => {
     try {
@@ -20,27 +23,46 @@ function ModalWeightProduct({ onConfirm }) {
       socket.onopen = () => {
         console.log("Conexão WebSocket estabelecida");
         pedirPeso();
+        setIsFetching(true);
+        setError("");
+
+        intervalRef.current = setInterval(() => {
+          pedirPeso();
+        }, 2000);
       };
 
       // Quando receber uma mensagem do servidor
       socket.onmessage = (event) => {
         const peso = parseFloat(event.data.replace(",", "."));
         setWeight(peso);
-        console.log(peso);
-        confirmWeight();
+
+        // Parar as tentativas quando o peso for recebido
+        clearInterval(intervalRef.current);
+        setIsFetching(false);
+
+        // Adicionar um atraso de 500ms antes de confirmar o peso
+        setTimeout(() => {
+          onConfirm(peso);
+        }, "600");
       };
 
       // Tratar erros do WebSocket
       socket.onerror = (error) => {
         console.error("Erro no WebSocket:", error);
+        setError("Erro na conexão com a balança.")
+        setIsFetching(false);
       };
 
       // Quando a conexão for fechada
       socket.onclose = () => {
         console.log("Conexão WebSocket fechada");
+        clearInterval(intervalRef.current); // Parar o loop ao fechar a conexão
+        setIsFetching(false);
       };
     } catch (error) {
       console.error("Erro ao obter o peso:", error);
+      setError("Erro ao tentar conectar com a balança.");
+      setIsFetching(false);
     }
   };
 
@@ -63,6 +85,10 @@ function ModalWeightProduct({ onConfirm }) {
       fetchWeight();
     }
     setWeight("");
+    return () => {
+      // Limpar o intervalo ao desmontar o componente
+      clearInterval(intervalRef.current);
+    };
   }, [state.modalWeightProduct]);
 
   return (
@@ -91,10 +117,15 @@ function ModalWeightProduct({ onConfirm }) {
               <button
                 className="confirm-weight-selected"
                 onClick={confirmWeight}
+                disabled={isFetching} // Desabilitar o botão enqueanto busca o peso
               >
                 OK
               </button>
             </div>
+            {error && <p className="error-message">{error}</p>}
+            {isFetching && (
+              <p className="loading-message">Tentando obter o peso da balança...</p>
+            )} {/* Mostrar status de busca */}
           </div>
         </div>
       </div>

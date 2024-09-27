@@ -86,19 +86,19 @@ function ModalSearchProducts() {
       if (!weight) return;
 
       setCartProducts((prevCart) => {
-        const existingProduct = prevCart.find(
-          (item) => item.Code === product.Code
-        );
+        // const existingProduct = prevCart.find(
+        //   (item) => item.Code === product.Code
+        // );
 
-        if (existingProduct) {
-          return prevCart.map((item) => {
-            if (item.Code === existingProduct.Code) {
-              return { ...item, Quantity: item.Quantity + parseFloat(weight) };
-            }
-            return item;
-          });
-        }
-        return [...prevCart, { ...product, Quantity: parseFloat(weight) }];
+        // if (existingProduct) {
+        //   return prevCart.map((item) => {
+        //     if (item.Code === existingProduct.Code) {
+        //       return { ...item, Quantity: item.Quantity + parseFloat(weight) };
+        //     }
+        //     return item;
+        //   });
+        // }
+        return [...prevCart, { ...product, Quantity: parseFloat(weight), Index: prevCart.length + 1 }];
       });
     } else {
       // para produtos que não são por peso
@@ -116,7 +116,7 @@ function ModalSearchProducts() {
             return item;
           });
         }
-        return [...prevCart, { ...product, Quantity: 1 }];
+        return [...prevCart, { ...product, Quantity: 1, Index: prevCart.length + 1 }];
       });
     }
     closeModalSearchProduct();
@@ -158,6 +158,12 @@ function ModalSearchProducts() {
             <div className="product-selection">
               <div className="selection-header">
                 <h1>Selecionar</h1>
+                <button
+                  className="close-modal-order"
+                  onClick={closeModalSearchProduct}
+                >
+                  X
+                </button>
               </div>
               <div className="selection-body">
                 {products.length === 0 ? (

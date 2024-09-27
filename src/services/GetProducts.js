@@ -1,5 +1,7 @@
+import configConnectionServer from '../configConnectionServer.json';
+
 async function GetProducts(){
-  return fetch('http://localhost:3001/products')
+  return fetch(`http://${configConnectionServer.hostname}:${configConnectionServer.port}/products`)
   .then(response => {
     if (!response.ok){
       throw new Error('Erro na requisição: ' + response.status);

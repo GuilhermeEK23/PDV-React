@@ -7,8 +7,8 @@ import { CartContext } from '../../contexts/CartContext';
 function TableProducts() {
   const {cartProducts, setCartProducts} = useContext(CartContext);
 
-  const deleteProduct = (code) => {
-    const newCartProducts = cartProducts.filter((item) => item.Code !== code);
+  const deleteProduct = (index) => {
+    const newCartProducts = cartProducts.filter((item) => item.Index !== index);
     setCartProducts(newCartProducts);
   }
 
@@ -32,7 +32,7 @@ function TableProducts() {
                 <td>{item.SalePrice.toFixed(2)}</td>
                 <td>{item.Quantity.toFixed(3)}</td>
                 <td>{(item.SalePrice * item.Quantity).toFixed(2)}</td>
-                <td><FaTrashAlt onClick={() => deleteProduct(item.Code)} className='icon-trash' /></td>
+                <td><FaTrashAlt onClick={() => deleteProduct(item.Index)} className='icon-trash' /></td>
               </tr>
             ))}
             <tr>

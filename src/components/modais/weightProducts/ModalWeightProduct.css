@@ -61,3 +61,8 @@
   cursor: pointer;
   padding: 8px;
 }
+
+.error-message{
+  font-size: x-large;
+  color: rgb(248, 61, 61);
+}

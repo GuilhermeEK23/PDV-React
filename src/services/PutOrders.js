@@ -1,3 +1,5 @@
+import configConnectionServer from '../configConnectionServer.json';
+
 async function PutOrders(products, order){
   console.log("Produtos ");
   console.log(products);
@@ -7,7 +9,7 @@ async function PutOrders(products, order){
   console.log(dataOrderProducts);
 
   try {
-    const response = await fetch('http://localhost:3001/orderproducts', {
+    const response = await fetch(`http://${configConnectionServer.hostname}:${configConnectionServer.port}/orderproducts`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

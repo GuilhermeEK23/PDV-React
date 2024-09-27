@@ -1,5 +1,7 @@
+import configConnectionServer from '../configConnectionServer.json';
+
 async function GetOrder(numberOrder){
-  return fetch(`http://localhost:3001/order/${numberOrder}`)
+  return fetch(`http://${configConnectionServer.hostname}:${configConnectionServer.port}/order/${numberOrder}`)
   .then( response => {
     if (!response.ok){
       throw new Error('Erro na requisição: ' + response.status);
